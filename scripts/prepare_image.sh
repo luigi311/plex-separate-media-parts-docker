@@ -1,11 +1,4 @@
 #!/bin/bash -xe
-# Update image
-apt clean
-apt-get update
-apt-get upgrade -y --allow-unauthenticated
-
-# Install necessary tools
-apt-get install --no-install-recommends --allow-unauthenticated -y xz-utils wget
 
 # Check if compiled Plex Separate Parts Transcoder is available
 if [ -f "/usr/lib/plexseparatepartstranscoder/Plex Separate Parts Transcoder" ]; then
@@ -13,7 +6,6 @@ if [ -f "/usr/lib/plexseparatepartstranscoder/Plex Separate Parts Transcoder" ];
 	rm "/usr/lib/plexseparatepartstranscoder/Plex Separate Parts Transcoder.py"
 else
 	echo "Plex Separate Parts Transcoder source code exist, installing prerequisites"
-	apt-get install --no-install-recommends --allow-unauthenticated -y python3
 	mv "/usr/lib/plexseparatepartstranscoder/Plex Separate Parts Transcoder.py" "/usr/lib/plexseparatepartstranscoder/Plex Separate Parts Transcoder"
 fi
 
@@ -31,20 +23,8 @@ tar xvf ffmpeg.tar.xz
 mv -v ffmpeg-*/ffprobe /usr/local/bin/
 mv -v ffmpeg-*/ffmpeg /usr/local/bin/
 rm -rfv ffmpeg.tar.xz ffmpeg-*
-apt remove --purge -y xz-utils
 
 # Fix permissions
 chmod +x /usr/local/bin/ffprobe
 chmod +x /usr/local/bin/ffmpeg
-chmod +x /tmp/scripts/update_transcoder.sh
 chmod +x /usr/lib/plexseparatepartstranscoder/Plex\ Separate\ Parts\ Transcoder
-
-# Update transcoder
-/tmp/scripts/update_transcoder.sh
-
-# Cleanup
-apt-get clean
-rm -rf \
-	/tmp/* \
-	/var/lib/apt/lists/* \
-	/var/tmp/*
