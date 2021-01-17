@@ -1,4 +1,4 @@
-FROM plexinc/pms-docker:latest AS final
+FROM plexinc/pms-docker:latest
 
 # Install dependencies
 RUN apt-get update && \
@@ -9,7 +9,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /
+WORKDIR /usr/lib/plexmediaserver
+RUN curl https://raw.githubusercontent.com/Saoneth/plex-custom-audio/master/install.sh | bash
+
 COPY scripts /opt
 COPY src/Plex_Separate_Parts_Transcoder/ /usr/lib/plexseparatepartstranscoder/
 
